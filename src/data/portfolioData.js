@@ -14,7 +14,7 @@ export const portfolioData = {
     email: "neej.butani1603@gmail.com",
     github: "https://github.com/Neej03",
     linkedin: "https://www.linkedin.com/in/neej-butani-085b6a286/",
-    reelVideoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    reelVideoUrl: "/assets/neej_reel.mp4",
     reelPosterUrl: "/assets/project_nexus_ai.jpg",
     portraitImage: "/assets/neej_portrait.jpg",
     resumeUrl: "/assets/resume.pdf"
