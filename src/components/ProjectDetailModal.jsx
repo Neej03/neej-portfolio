@@ -1,9 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ExternalLink, CheckCircle2, Layers, Cpu, Sparkles } from 'lucide-react';
+import { X, ExternalLink, CheckCircle2, Sparkles } from 'lucide-react';
 import { GithubIcon } from './BrandIcons';
 
 export default function ProjectDetailModal({ project, onClose, onCursorEnter, onCursorLeave }) {
+  useEffect(() => {
+    if (project) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [project]);
+
   if (!project) return null;
 
   return (
@@ -12,24 +23,24 @@ export default function ProjectDetailModal({ project, onClose, onCursorEnter, on
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 bg-[#050505]/90 backdrop-blur-xl flex items-center justify-center p-4 md:p-8 overflow-y-auto"
+        className="fixed inset-0 z-50 bg-[#050505]/90 backdrop-blur-xl flex justify-center items-center p-4 md:p-8"
         onClick={onClose}
       >
         <motion.div
-          initial={{ scale: 0.9, y: 30, opacity: 0 }}
+          initial={{ scale: 0.95, y: 20, opacity: 0 }}
           animate={{ scale: 1, y: 0, opacity: 1 }}
-          exit={{ scale: 0.9, y: 30, opacity: 0 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-          className="relative w-full max-w-4xl bg-[#121212] border border-[#FF1E1E]/40 rounded-3xl overflow-hidden shadow-2xl my-8"
+          exit={{ scale: 0.95, y: 20, opacity: 0 }}
+          transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+          className="relative w-full max-w-4xl max-h-[90vh] bg-[#121212] border border-[#FF1E1E]/40 rounded-3xl overflow-hidden shadow-2xl flex flex-col"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Header */}
-          <div className="flex items-center justify-between p-6 bg-[#050505] border-b border-white/10">
+          {/* Sticky Header — Always Pinned to Top */}
+          <div className="sticky top-0 z-20 flex items-center justify-between p-5 md:p-6 bg-[#050505] border-b border-white/10 shrink-0">
             <div className="flex items-center gap-3">
               <span className="px-3 py-1 rounded-full bg-[#FF1E1E]/20 text-[#FF2B2B] text-xs font-mono font-bold uppercase tracking-wider border border-[#FF1E1E]/40">
                 {project.category}
               </span>
-              <h3 className="font-heading font-extrabold text-xl text-white">
+              <h3 className="font-heading font-extrabold text-lg md:text-xl text-white truncate max-w-xs md:max-w-md">
                 {project.title}
               </h3>
             </div>
@@ -38,30 +49,31 @@ export default function ProjectDetailModal({ project, onClose, onCursorEnter, on
               onClick={onClose}
               onMouseEnter={() => onCursorEnter('hover')}
               onMouseLeave={onCursorLeave}
-              className="p-2.5 rounded-full bg-[#171717] hover:bg-[#FF1E1E] text-white transition-colors"
+              className="p-2.5 rounded-full bg-[#171717] hover:bg-[#FF1E1E] text-white transition-colors shrink-0"
+              aria-label="Close modal"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Project Banner Image */}
-          <div className="relative aspect-video w-full overflow-hidden bg-black">
-            <img
-              src={project.image}
-              alt={project.title}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-transparent opacity-90" />
-          </div>
+          {/* Scrollable Modal Body */}
+          <div className="flex-1 overflow-y-auto p-6 md:p-10 space-y-8 no-scrollbar">
+            {/* Project Banner Image */}
+            <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black border border-white/10">
+              <img
+                src={project.image}
+                alt={project.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-transparent opacity-80" />
+            </div>
 
-          {/* Modal Content Body */}
-          <div className="p-6 md:p-10 space-y-8">
             {/* Overview */}
             <div>
-              <h4 className="text-xs font-mono uppercase tracking-widest text-[#FF1E1E] mb-2 flex items-center gap-1.5">
+              <h4 className="text-xs font-mono uppercase tracking-widest text-[#FF1E1E] mb-2 flex items-center gap-1.5 font-bold">
                 <Sparkles className="w-4 h-4" /> Overview
               </h4>
-              <p className="text-lg text-gray-200 font-normal leading-relaxed">
+              <p className="text-base md:text-lg text-gray-200 font-normal leading-relaxed">
                 {project.overview}
               </p>
             </div>
@@ -72,7 +84,7 @@ export default function ProjectDetailModal({ project, onClose, onCursorEnter, on
                 <h5 className="font-heading font-bold text-white text-base mb-2 text-red-400">
                   The Problem
                 </h5>
-                <p className="text-xs text-gray-300 leading-relaxed">
+                <p className="text-xs md:text-sm text-gray-300 leading-relaxed">
                   {project.problem}
                 </p>
               </div>
@@ -81,16 +93,16 @@ export default function ProjectDetailModal({ project, onClose, onCursorEnter, on
                 <h5 className="font-heading font-bold text-white text-base mb-2 text-[#FF2B2B]">
                   The Solution
                 </h5>
-                <p className="text-xs text-gray-300 leading-relaxed">
+                <p className="text-xs md:text-sm text-gray-300 leading-relaxed">
                   {project.solution}
                 </p>
               </div>
             </div>
 
-            {/* Key Highlights */}
+            {/* Key Technical Highlights */}
             {project.highlights && (
               <div>
-                <h4 className="text-xs font-mono uppercase tracking-widest text-[#FF1E1E] mb-3">
+                <h4 className="text-xs font-mono uppercase tracking-widest text-[#FF1E1E] mb-3 font-bold">
                   Key Technical Highlights
                 </h4>
                 <ul className="space-y-2">
@@ -106,7 +118,7 @@ export default function ProjectDetailModal({ project, onClose, onCursorEnter, on
 
             {/* Tech Stack Tags */}
             <div>
-              <h4 className="text-xs font-mono uppercase tracking-widest text-gray-400 mb-3">
+              <h4 className="text-xs font-mono uppercase tracking-widest text-gray-400 mb-3 font-bold">
                 Technologies Used
               </h4>
               <div className="flex flex-wrap gap-2">
