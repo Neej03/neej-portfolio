@@ -14,6 +14,7 @@ import ResumeSection from './components/ResumeSection';
 import Contact from './components/Contact';
 import PortfolioAssistant from './components/PortfolioAssistant';
 import PlayReelModal from './components/PlayReelModal';
+import GlobalClickAudio from './components/GlobalClickAudio';
 import Footer from './components/Footer';
 
 export default function App() {
@@ -86,6 +87,9 @@ export default function App() {
         onCursorEnter={handleCursorEnter}
         onCursorLeave={handleCursorLeave}
       />
+
+      {/* Global Interactive Click Sound & Voice Feedback */}
+      <GlobalClickAudio />
 
       {/* Footer */}
       <Footer onCursorEnter={handleCursorEnter} onCursorLeave={handleCursorLeave} />

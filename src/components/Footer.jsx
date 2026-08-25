@@ -13,10 +13,12 @@ export default function Footer({ onCursorEnter, onCursorLeave }) {
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-8">
         {/* Left Brand info */}
         <div className="text-center md:text-left space-y-2">
-          <div className="flex items-center justify-center md:justify-start gap-2">
-            <div className="w-8 h-8 rounded-lg bg-[#FF1E1E] flex items-center justify-center font-extrabold text-white text-base">
-              N
-            </div>
+          <div className="flex items-center justify-center md:justify-start gap-2.5">
+            <img
+              src="/assets/n_logo.jpg"
+              alt="N Logo"
+              className="w-8 h-8 rounded-lg object-cover border border-amber-500/40 shadow-md"
+            />
             <span className="font-heading font-extrabold text-xl text-white">
               {portfolioData.personal.name}
             </span>

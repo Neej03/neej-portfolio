@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ArrowUpRight, Code, Sparkles } from 'lucide-react';
+import { Menu, X, ArrowUpRight, Code, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import { portfolioData } from '../data/portfolioData';
 
 export default function Navbar({ onCursorEnter, onCursorLeave }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
+  const [soundEnabled, setSoundEnabled] = useState(true);
 
   const navLinks = [
     { name: 'Home', href: '#hero' },
@@ -29,6 +30,21 @@ export default function Navbar({ onCursorEnter, onCursorLeave }) {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    const handleSoundState = (e) => {
+      if (e.detail && typeof e.detail.soundEnabled === 'boolean') {
+        setSoundEnabled(e.detail.soundEnabled);
+      }
+    };
+    window.addEventListener('sound-state-changed', handleSoundState);
+    return () => window.removeEventListener('sound-state-changed', handleSoundState);
+  }, []);
+
+  const handleToggleSound = (e) => {
+    e.stopPropagation();
+    window.dispatchEvent(new CustomEvent('toggle-sound'));
+  };
 
   const handleLinkClick = (href) => {
     setMobileMenuOpen(false);
@@ -58,13 +74,15 @@ export default function Navbar({ onCursorEnter, onCursorLeave }) {
               e.preventDefault();
               handleLinkClick('#hero');
             }}
-            className="flex items-center gap-2 group cursor-pointer"
+            className="flex items-center gap-2.5 group cursor-pointer"
             onMouseEnter={() => onCursorEnter('hover')}
             onMouseLeave={onCursorLeave}
           >
-            <div className="w-9 h-9 rounded-lg bg-[#FF1E1E] flex items-center justify-center font-extrabold text-white text-lg tracking-tighter shadow-lg shadow-[#FF1E1E]/30 group-hover:scale-105 transition-transform">
-              N
-            </div>
+            <img
+              src="/assets/n_logo.jpg"
+              alt="N Logo"
+              className="w-9 h-9 rounded-xl object-cover shadow-lg shadow-[#FF1E1E]/20 group-hover:scale-105 transition-transform border border-amber-500/40"
+            />
             <div className="flex flex-col">
               <span className="font-heading font-bold text-lg md:text-xl text-white tracking-tight flex items-center gap-1.5">
                 {portfolioData.personal.name}
@@ -95,34 +113,62 @@ export default function Navbar({ onCursorEnter, onCursorLeave }) {
             ))}
           </nav>
 
-          {/* Right CTA Button */}
-          <div className="hidden lg:flex items-center gap-4">
-            <a
-              href="#contact"
-              onClick={(e) => {
-                e.preventDefault();
-                handleLinkClick('#contact');
-              }}
+          {/* Right Header Action Buttons (Voice & Sound Pill + Hire Me) */}
+          <div className="flex items-center gap-3">
+            {/* Top Header Voice & Sound Button */}
+            <button
+              onClick={handleToggleSound}
               onMouseEnter={() => onCursorEnter('hover')}
               onMouseLeave={onCursorLeave}
-              className="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#FF1E1E] text-white font-heading font-semibold text-xs uppercase tracking-wider overflow-hidden group shadow-lg shadow-[#FF1E1E]/25 hover:shadow-[#FF1E1E]/50 transition-all hover:scale-105 active:scale-95"
+              className={`px-3.5 py-2 rounded-full text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-2 border transition-all duration-300 shadow-lg ${
+                soundEnabled
+                  ? 'bg-[#121212] border-[#FF1E1E]/60 text-white hover:bg-[#FF1E1E] shadow-[#FF1E1E]/20'
+                  : 'bg-[#121212]/70 border-white/20 text-gray-400 hover:text-white'
+              }`}
+              title={soundEnabled ? 'Mute Click Voice Audio' : 'Enable Click Voice Audio'}
             >
-              <span className="relative z-10 flex items-center gap-1.5">
-                Hire Me
-                <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-[#FF2B2B] to-[#D90000] opacity-0 group-hover:opacity-100 transition-opacity" />
-            </a>
-          </div>
+              {soundEnabled ? (
+                <>
+                  <Volume2 className="w-3.5 h-3.5 text-[#FF1E1E] group-hover:text-white animate-pulse" />
+                  <span className="hidden sm:inline">VOICE & SOUND ON</span>
+                </>
+              ) : (
+                <>
+                  <VolumeX className="w-3.5 h-3.5 text-gray-400" />
+                  <span className="hidden sm:inline">SOUND MUTED</span>
+                </>
+              )}
+            </button>
 
-          {/* Mobile Hamburger Toggle */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle menu"
-            className="lg:hidden p-2.5 rounded-full bg-[#171717] text-white border border-[#FF1E1E]/30 focus:outline-none"
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6 text-[#FF1E1E]" /> : <Menu className="w-6 h-6" />}
-          </button>
+            {/* Desktop Hire Me CTA Button */}
+            <div className="hidden lg:flex items-center">
+              <a
+                href="#contact"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleLinkClick('#contact');
+                }}
+                onMouseEnter={() => onCursorEnter('hover')}
+                onMouseLeave={onCursorLeave}
+                className="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#FF1E1E] text-white font-heading font-semibold text-xs uppercase tracking-wider overflow-hidden group shadow-lg shadow-[#FF1E1E]/25 hover:shadow-[#FF1E1E]/50 transition-all hover:scale-105 active:scale-95"
+              >
+                <span className="relative z-10 flex items-center gap-1.5">
+                  Hire Me
+                  <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-[#FF2B2B] to-[#D90000] opacity-0 group-hover:opacity-100 transition-opacity" />
+              </a>
+            </div>
+
+            {/* Mobile Hamburger Toggle */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
+              className="lg:hidden p-2.5 rounded-full bg-[#171717] text-white border border-[#FF1E1E]/30 focus:outline-none"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6 text-[#FF1E1E]" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
       </motion.header>
 
@@ -137,45 +183,32 @@ export default function Navbar({ onCursorEnter, onCursorLeave }) {
             className="fixed inset-0 z-30 bg-[#050505] flex flex-col justify-between p-8 pt-28 lg:hidden border-b border-[#FF1E1E]/30"
           >
             <div className="flex flex-col gap-6">
-              <span className="text-xs font-mono text-[#FF1E1E] uppercase tracking-widest flex items-center gap-2">
-                <Sparkles className="w-4 h-4" /> Navigation
-              </span>
-              <nav className="flex flex-col gap-4">
-                {navLinks.map((link, idx) => (
-                  <motion.a
-                    key={link.name}
-                    href={link.href}
-                    initial={{ x: -40, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.1 + idx * 0.05 }}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleLinkClick(link.href);
-                    }}
-                    className="font-heading font-extrabold text-3xl text-white hover:text-[#FF1E1E] transition-colors flex items-center justify-between border-b border-white/5 pb-3"
-                  >
-                    {link.name}
-                    <ArrowUpRight className="w-5 h-5 text-gray-500" />
-                  </motion.a>
-                ))}
-              </nav>
+              {navLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLinkClick(link.href);
+                  }}
+                  className="font-heading font-extrabold text-3xl text-white hover:text-[#FF1E1E] transition-colors"
+                >
+                  {link.name}
+                </a>
+              ))}
             </div>
 
-            <div className="flex flex-col gap-4 pt-6 border-t border-white/10">
+            <div className="pt-6 border-t border-white/10 flex flex-col gap-4">
               <a
                 href="#contact"
                 onClick={(e) => {
                   e.preventDefault();
                   handleLinkClick('#contact');
                 }}
-                className="w-full py-4 text-center rounded-xl bg-[#FF1E1E] text-white font-heading font-bold text-base tracking-wider uppercase shadow-xl shadow-[#FF1E1E]/30"
+                className="w-full py-4 rounded-full bg-[#FF1E1E] text-white text-center font-heading font-bold text-sm uppercase tracking-wider shadow-lg shadow-[#FF1E1E]/30"
               >
-                Get In Touch
+                Hire Me
               </a>
-              <div className="flex justify-between items-center text-xs text-gray-500 font-mono">
-                <span>Neej Butani — Portfolio</span>
-                <span>2026</span>
-              </div>
             </div>
           </motion.div>
         )}

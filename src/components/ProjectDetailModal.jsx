@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+ï»¿import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ExternalLink, CheckCircle2, Sparkles } from 'lucide-react';
 import { GithubIcon } from './BrandIcons';
@@ -34,7 +34,7 @@ export default function ProjectDetailModal({ project, onClose, onCursorEnter, on
           className="relative w-full max-w-4xl max-h-[90vh] bg-[#121212] border border-[#FF1E1E]/40 rounded-3xl overflow-hidden shadow-2xl flex flex-col"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Sticky Header — Always Pinned to Top */}
+          {/* Sticky Header - Always Pinned to Top */}
           <div className="sticky top-0 z-20 flex items-center justify-between p-5 md:p-6 bg-[#050505] border-b border-white/10 shrink-0">
             <div className="flex items-center gap-3">
               <span className="px-3 py-1 rounded-full bg-[#FF1E1E]/20 text-[#FF2B2B] text-xs font-mono font-bold uppercase tracking-wider border border-[#FF1E1E]/40">

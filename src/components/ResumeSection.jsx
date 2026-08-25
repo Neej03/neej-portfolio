@@ -26,8 +26,8 @@ Databases: MySQL, MongoDB, Firebase
 Tools: Git, GitHub, VS Code, Figma, Postman
 
 SELECTED PROJECTS:
-1. Nexus AI Studio (React, Node.js, Tailwind CSS)
-2. HyperFlow Cloud Dashboard (React, JavaScript, Node.js, MongoDB)
+1. Nexus Innovation (React, Node.js, Tailwind CSS)
+2. Nexus Data Science Hub (React, Python, FastAPI, Chart.js)
 3. Aether Editorial UI Kit (React, Tailwind CSS, Framer Motion)
       `
     ], { type: 'text/plain' });
